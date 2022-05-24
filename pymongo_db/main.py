@@ -2,9 +2,9 @@
 main driver for a simple social network project
 """
 from xmlrpc.client import boolean
-import users
-import user_status
-import menu
+from pymongo_db import users
+from pymongo_db import user_status
+from pymongo_db import menu
 import pandas as pd
 from cerberus import Validator
 from loguru import logger
@@ -155,7 +155,8 @@ def add_user(
       user_collection.add_user() returns False).
     - Otherwise, it returns True.
     """
-    new_user = user_collection.add_user(user_id, email, user_name, user_lastname)
+    new_user = user_collection.add_user(
+        user_id, email, user_name, user_lastname)
     return new_user
 
 
@@ -173,7 +174,8 @@ def update_user(
     - Returns False if there any errors.
     - Otherwise, it returns True.
     """
-    updated_user = user_collection.modify_user(user_id, email, user_name, user_lastname)
+    updated_user = user_collection.modify_user(
+        user_id, email, user_name, user_lastname)
     return updated_user
 
 
@@ -229,7 +231,8 @@ def update_status(
     - Returns False if there any errors.
     - Otherwise, it returns True.
     """
-    modify_status = status_collection.modify_status(user_id, status_id, status_text)
+    modify_status = status_collection.modify_status(
+        user_id, status_id, status_text)
     return modify_status
 
 

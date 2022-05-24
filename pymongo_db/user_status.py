@@ -3,7 +3,7 @@ classes to manage the user status messages
 """
 # pylint: disable=R0903
 from pprint import pprint
-import main
+from pymongo_db import main
 from loguru import logger
 
 logger.add("out_{time:YYYY.MM.DD}.log", backtrace=True, diagnose=True)

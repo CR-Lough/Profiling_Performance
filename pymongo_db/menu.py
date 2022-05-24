@@ -4,7 +4,7 @@ Provides a basic frontend
 import os
 import sys
 
-import main
+from pymongo_db import main
 from peewee import *
 from cerberus import Validator
 from loguru import logger
@@ -39,18 +39,21 @@ def add_user():
     """
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))}, user_schema) is False
+        v.validate({"user_id": (user_id := input("User ID: "))},
+                   user_schema) is False
     ):
         print(v.errors)
     while v.validate({"email": (email := input("User email: "))}, user_schema) is False:
         print(v.errors)
     while (
-        v.validate({"name": (user_name := input("User name: "))}, user_schema) is False
+        v.validate({"name": (user_name := input("User name: "))},
+                   user_schema) is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"lastname": (user_lastname := input("User last name: "))}, user_schema
+            {"lastname": (user_lastname := input(
+                "User last name: "))}, user_schema
         )
         is False
     ):
@@ -68,18 +71,21 @@ def update_user():
     """
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))}, user_schema) is False
+        v.validate({"user_id": (user_id := input("User ID: "))},
+                   user_schema) is False
     ):
         print(v.errors)
     while v.validate({"email": (email := input("User email: "))}, user_schema) is False:
         print(v.errors)
     while (
-        v.validate({"name": (user_name := input("User name: "))}, user_schema) is False
+        v.validate({"name": (user_name := input("User name: "))},
+                   user_schema) is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"lastname": (user_lastname := input("User last name: "))}, user_schema
+            {"lastname": (user_lastname := input(
+                "User last name: "))}, user_schema
         )
         is False
     ):
@@ -101,7 +107,8 @@ def search_user():
     """
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))}, user_schema) is False
+        v.validate({"user_id": (user_id := input("User ID: "))},
+                   user_schema) is False
     ):
         print(v.errors)
     result = main.search_user(user_id, user_collection)
@@ -122,7 +129,8 @@ def delete_user():
     """
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))}, user_schema) is False
+        v.validate({"user_id": (user_id := input("User ID: "))},
+                   user_schema) is False
     ):
 
         print(v.errors)
@@ -139,17 +147,20 @@ def add_status():
     """
     status_schema = _status_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))}, status_schema) is False
+        v.validate({"user_id": (user_id := input("User ID: "))},
+                   status_schema) is False
     ):
         print(v.errors)
     while (
-        v.validate({"status_id": (status_id := input("Status ID: "))}, status_schema)
+        v.validate(
+            {"status_id": (status_id := input("Status ID: "))}, status_schema)
         is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"status_text": (status_text := input("Status text: "))}, status_schema
+            {"status_text": (status_text := input(
+                "Status text: "))}, status_schema
         )
         is False
     ):
@@ -167,17 +178,20 @@ def update_status():
     """
     status_schema = _status_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))}, status_schema) is False
+        v.validate({"user_id": (user_id := input("User ID: "))},
+                   status_schema) is False
     ):
         print(v.errors)
     while (
-        v.validate({"status_id": (status_id := input("Status ID: "))}, status_schema)
+        v.validate(
+            {"status_id": (status_id := input("Status ID: "))}, status_schema)
         is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"status_text": (status_text := input("Status text: "))}, status_schema
+            {"status_text": (status_text := input(
+                "Status text: "))}, status_schema
         )
         is False
     ):
