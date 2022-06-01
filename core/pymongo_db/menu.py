@@ -19,7 +19,7 @@ def load_users():
     """
     Loads user accounts from a file
     """
-    filename = input("Enter filename of user file: ")
+    filename = 'accounts.csv'#input("Enter filename of user file: ")
     main.load_users(filename)
 
 
@@ -28,7 +28,7 @@ def load_status_updates():
     """
     Loads status updates from a file
     """
-    filename = input("Enter filename for status file: ")
+    filename = 'status_updates.csv'#input("Enter filename for status file: ")
     main.load_statuses(filename)
 
 
@@ -37,23 +37,25 @@ def add_user():
     """
     Adds a new user into the database
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))},
+        v.validate({"user_id": (user_id := 'connor')},
                    user_schema) is False
     ):
         print(v.errors)
-    while v.validate({"email": (email := input("User email: "))}, user_schema) is False:
+    while v.validate({"email": (email := 'connor')}, user_schema) is False:
         print(v.errors)
     while (
-        v.validate({"name": (user_name := input("User name: "))},
+        v.validate({"name": (user_name := 'connor')},
                    user_schema) is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"lastname": (user_lastname := input(
-                "User last name: "))}, user_schema
+            {"lastname": (user_lastname := 'connor')}, user_schema
         )
         is False
     ):
@@ -69,23 +71,25 @@ def update_user():
     """
     Updates information for an existing user
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))},
+        v.validate({"user_id": (user_id := 'connor')},
                    user_schema) is False
     ):
         print(v.errors)
-    while v.validate({"email": (email := input("User email: "))}, user_schema) is False:
+    while v.validate({"email": (email := 'connor')}, user_schema) is False:
         print(v.errors)
     while (
-        v.validate({"name": (user_name := input("User name: "))},
+        v.validate({"name": (user_name := 'connor')},
                    user_schema) is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"lastname": (user_lastname := input(
-                "User last name: "))}, user_schema
+            {"lastname": (user_lastname := 'connor')}, user_schema
         )
         is False
     ):
@@ -105,9 +109,12 @@ def search_user():
     """
     Searches a user in the database
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))},
+        v.validate({"user_id": (user_id := 'connor')},
                    user_schema) is False
     ):
         print(v.errors)
@@ -127,9 +134,12 @@ def delete_user():
     """
     Deletes user from the database
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     user_schema = _user_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))},
+        v.validate({"user_id": (user_id := 'connor')},
                    user_schema) is False
     ):
 
@@ -145,22 +155,24 @@ def add_status():
     """
     Adds a new status into the database
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     status_schema = _status_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))},
+        v.validate({"user_id": (user_id := 'connor')},
                    status_schema) is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"status_id": (status_id := input("Status ID: "))}, status_schema)
+            {"status_id": (status_id := 'connor')}, status_schema)
         is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"status_text": (status_text := input(
-                "Status text: "))}, status_schema
+            {"status_text": (status_text := 'connor')}, status_schema
         )
         is False
     ):
@@ -176,22 +188,24 @@ def update_status():
     """
     Updates information for an existing status
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     status_schema = _status_schema()
     while (
-        v.validate({"user_id": (user_id := input("User ID: "))},
+        v.validate({"user_id": (user_id := 'connor')},
                    status_schema) is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"status_id": (status_id := input("Status ID: "))}, status_schema)
+            {"status_id": (status_id := 'connor')}, status_schema)
         is False
     ):
         print(v.errors)
     while (
         v.validate(
-            {"status_text": (status_text := input(
-                "Status text: "))}, status_schema
+            {"status_text": (status_text := 'connor')}, status_schema
         )
         is False
     ):
@@ -207,10 +221,13 @@ def search_status():
     """
     Searches a status in the database
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     status_schema = _status_schema()
     while (
         v.validate(
-            {"status_id": (status_id := input("Enter status ID to search: "))},
+            {"status_id": (status_id := 'connor')},
             status_schema,
         )
         is False
@@ -228,10 +245,13 @@ def delete_status():
     """
     Deletes status from the database
     """
+    user_collection = main.init_user_collection()
+    status_collection = main.init_status_collection()
+    v = Validator()
     status_schema = _status_schema()
     while (
         v.validate(
-            {"status_id": (status_id := input("Enter status ID to delete: "))},
+            {"status_id": (status_id := 'connor')},
             status_schema,
         )
         is False
@@ -301,10 +321,15 @@ def quit_program():
     """
     sys.exit()
 
+def setup():
+        main.drop_database()
+        v = Validator()
+        user_collection = main.init_user_collection()
+        status_collection = main.init_status_collection()
 
 with logger.catch(message="Because we never know..."):
     if __name__ == "__main__":
-
+        main.drop_database()
         v = Validator()
         user_collection = main.init_user_collection()
         status_collection = main.init_status_collection()

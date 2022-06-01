@@ -8,6 +8,7 @@ from pymongo_db import menu
 import pandas as pd
 from cerberus import Validator
 from loguru import logger
+import time
 
 logger.add("out_{time:YYYY.MM.DD}.log", backtrace=True, diagnose=True)
 
@@ -45,38 +46,12 @@ def get_database():
     # Create the database for our example (we will use the same database throughout the tutorial
     return client["hw_db"]
 
-
-def validate_load_users(load_dict: list) -> bool:
-    """
-    Validate a .csv file against cerberus schema
-
-    :param filename: file that should be validated
-    :type filename: str
-    """
-    user_schema = menu._user_schema()
-    v = Validator()
-    x = all([v.validate(row, user_schema) for row in load_dict])
-    if x is not True:
-        return False
-    else:
-        return True
-
-
-def validate_load_status(load_dict: list) -> bool:
-    """
-    Validate a .csv file against cerberus schema
-
-    :param filename: file that should be validated
-    :type filename: str
-    """
-    status_schema = menu._status_schema()
-    v = Validator()
-    x = all([v.validate(row, status_schema) for row in load_dict])
-    if x is not True:
-        return False
-    else:
-        return True
-
+def drop_database():
+    db = get_database()
+    col = db["users"]
+    col.drop()
+    col = db["status_updates"]
+    col.drop()
 
 def load_users(filename: str):
     """
@@ -92,6 +67,7 @@ def load_users(filename: str):
     (such as empty fields in the source CSV file)
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     try:
         db = get_database()
         users_collection = db["users"]
@@ -99,10 +75,10 @@ def load_users(filename: str):
         load_dict = pd.read_csv(filename)  # "accounts.csv"
         load_dict.columns = load_dict.columns.str.lower()
         load_dict = load_dict.to_dict(orient="records")
-        if (temp := validate_load_users(load_dict)) is not True:
-            print("This .csv has failed validation. Please try again.")
-            return False
         users_collection.insert_many(load_dict)
+        end_time = time.perf_counter()
+        run_time = end_time - start_time
+        logger.info(f"PyMongo ran 'load_users()' in {run_time:.4f} secs")
         return load_dict
     except FileNotFoundError:
         logger.exception("NEW EXCEPTION")
@@ -121,6 +97,7 @@ def load_statuses(filename: str):
       source CSV file)
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     try:
         db = get_database()
         status_collection = db["status_updates"]
@@ -128,10 +105,10 @@ def load_statuses(filename: str):
         load_dict = pd.read_csv(filename)  # "status_updates.csv"
         load_dict.columns = load_dict.columns.str.lower()
         load_dict = load_dict.to_dict(orient="records")
-        if validate_load_status(load_dict) is not True:
-            print("This .csv has failed validation. Please try again.")
-            return False
         status_collection.insert_many(load_dict)
+        end_time = time.perf_counter()
+        run_time = end_time - start_time
+        logger.info(f"PyMongo ran 'load_statuses()' in {run_time:.4f} secs")
         return load_dict
     except FileNotFoundError:
         logger.exception("NEW EXCEPTION")
@@ -155,8 +132,12 @@ def add_user(
       user_collection.add_user() returns False).
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     new_user = user_collection.add_user(
         user_id, email, user_name, user_lastname)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'add_user()' in {run_time:.4f} secs")
     return new_user
 
 
@@ -174,8 +155,12 @@ def update_user(
     - Returns False if there any errors.
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     updated_user = user_collection.modify_user(
         user_id, email, user_name, user_lastname)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'update_user()' in {run_time:.4f} secs")
     return updated_user
 
 
@@ -187,7 +172,11 @@ def delete_user(user_id: str, user_collection: object):
     - Returns False if there are any errors (such as user_id not found)
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     purge_id = user_collection.delete_user(user_id)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'delete_user()' in {run_time:.4f} secs")
     return purge_id
 
 
@@ -200,7 +189,11 @@ def search_user(user_id: str, user_collection: object):
     - If the user is found, returns the corresponding User instance.
     - Otherwise, it returns None.
     """
+    start_time = time.perf_counter()
     find_user = user_collection.search_user(user_id)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'search_user()' in {run_time:.4f} secs")
     return find_user
 
 
@@ -217,7 +210,11 @@ def add_status(
       user_collection.add_status() returns False).
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     new_status = status_collection.add_status(user_id, status_id, status_text)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'add_status()' in {run_time:.4f} secs")
     return new_status
 
 
@@ -231,8 +228,12 @@ def update_status(
     - Returns False if there any errors.
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     modify_status = status_collection.modify_status(
         user_id, status_id, status_text)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'update_status()' in {run_time:.4f} secs")
     return modify_status
 
 
@@ -244,7 +245,11 @@ def delete_status(status_id: str, status_collection: object):
     - Returns False if there are any errors (such as status_id not found)
     - Otherwise, it returns True.
     """
+    start_time = time.perf_counter()
     purge_id = status_collection.delete_status(status_id)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'delete_status()' in {run_time:.4f} secs")
     return purge_id
 
 
@@ -260,31 +265,9 @@ def search_status(status_id: str, status_collection: object):
     # query = (socialnetwork_model.StatusTable
     #      .select(socialnetwork_model.StatusTable)
     #      .where(socialnetwork_model.StatusTable.status_id == status_id))
+    start_time = time.perf_counter()
     find_status = status_collection.search_status(status_id)
+    end_time = time.perf_counter()
+    run_time = end_time - start_time
+    logger.info(f"PyMongo ran 'search_status()' in {run_time:.4f} secs")
     return find_status
-
-
-def search_all_status_updates(user_id: str, status_collection: object):
-    """
-    Searches all status updates belonging to a user_id
-
-    :param user_id: ID of the user
-    :type user_id: str
-    :param status_collection: instance of the class for status methods
-    :type status_collection: object
-    """
-    all_status = status_collection.search_all_status_updates(user_id)
-    return all_status
-
-
-def filter_status_by_string(status_text: str, status_collection: object):
-    """
-    Searches all status updates containing a string
-
-    :param status_text: string to search
-    :type status_text: str
-    :param status_collection: instance of the class for status methods
-    :type status_collection: object
-    """
-    all_status = status_collection.filter_status_by_string(status_text)
-    return all_status
